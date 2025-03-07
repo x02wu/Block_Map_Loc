@@ -42,7 +42,7 @@ public:
         next_state.middleRows(0, 3) = pt + vt * dt;					//
 
         // velocity
-        Vector3t g(0.0f, 0.0f, -10.04f);
+        Vector3t g(0.0f, 0.0f, -9.80416f);
         Vector3t acc_ = raw_acc - acc_bias;
         Vector3t acc = qt * acc_;
         next_state.middleRows(3, 3) = vt;// + 0.5*(acc - g) * dt;		// acceleration didn't contribute to accuracy due to large noise

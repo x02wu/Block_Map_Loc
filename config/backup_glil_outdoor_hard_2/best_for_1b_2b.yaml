@@ -1,0 +1,100 @@
+block_localization: 
+    odom_child_frame_id: "livox_frame"
+
+    # lidar settings
+    lidarTopic: "/livox/points"
+    have_ring_time_channel: false     # if "XYZI", false; if "XYZIRT", true
+    lidarMinRange: 2.0
+    lidarMaxRange: 80
+    
+    # imu settings
+    imuTopic: "/livox/imu"
+    imuAccNoise: 0.13
+    imuGyrNoise: 0.13
+    gravity: 0.9
+    imuFrequency: 150 # given as 200
+
+    # sensors extrinsics T_lb actually between LiDAR & IMU, only extrinsicRot is used in code
+    extrinsicTrans: [0, 0, 0]
+    extrinsicRot: [1, 0, 0,
+                   0, 1, 0,
+                   0, 0, 1]
+    extrinsicRPY: [1, 0, 0,
+                   0, 1, 0,
+                   0, 0, 1]
+
+    # only one in use
+    # extrinsicRot: [  0.001496, -1.001448, -0.001148,
+    #                 0.098952, -0.002304, 0.996552,
+    #                 -0.996548, -0.003048, 0.097496 ]
+
+    L2gt_t: [ 0, 0, 0 ]
+    L2gt_R: [ 1, 0, 0,
+              0, 1, 0,
+              0, 0, 1 ]
+
+    # system settings
+    cool_time_duration: 0.07    # during "cool_time", imu inputs are ignored
+    key_interval: 0.07           # select key frames according to time interval
+    mapqry_interval: 1.0        # query time to change BM
+    
+    # ndt settings
+    ndt_neighbor_search_method: "DIRECT7"
+    ndt_resolution: 1.3
+    ndt_epsilon: 0.001           # maximum allowable translation squared difference between two consecutive transformations
+    penalty_thres: 1
+    penalty_weight: 2
+
+    # gtsam settings
+    odomLinearNoise: 0.8
+    odomAngularNoise: 0.95
+    active_factors: 100
+    preserve_factors: 50
+
+    # initialpose settings
+    # if "specify_init_pose" is true, pose estimator will be initialized with the following params. Otherwise, you need to input an initial pose with "2D Pose Estimate" on rviz" 
+    specify_init_pose: true
+
+    # outdoor_hard_1a
+    # init_pos_x: -86.040205
+    # init_pos_y: -8.857126
+    # init_pos_z: -11.043077
+    # init_ori_w: 0.754584
+    # init_ori_x: -0.011549
+    # init_ori_y: -0.014147
+    # init_ori_z: -0.655949
+
+    # outdoor_hard_1b
+    # init_pos_x: 103.702699
+    # init_pos_y: -3.365102
+    # init_pos_z: -11.275868
+    # init_ori_w: 0.996575
+    # init_ori_x: 0.010973
+    # init_ori_y: 0.077553
+    # init_ori_z: -0.026533
+
+    # outdoor_hard_2a
+    # init_pos_x: -104.346385
+    # init_pos_y: -10.320983
+    # init_pos_z: -11.663110
+    # init_ori_w: 0.145887
+    # init_ori_x: -0.035339
+    # init_ori_y: 0.046060
+    # init_ori_z: 0.987596
+
+    # outdoor_hard_2b
+    init_pos_x: 103.616473
+    init_pos_y: -1.695835
+    init_pos_z: -11.019081
+    init_ori_w: 0.998827
+    init_ori_x: -0.027811
+    init_ori_y: -0.005383
+    init_ori_z: 0.039274    
+
+
+
+
+globalmap_server:
+    globalmap_dir: "/home/wuxiao/Desktop/GLIL_Dataset/block_maps_hard/" # directory address of your BMs; end with "/"
+    downsample_resolution: 0.3
+    

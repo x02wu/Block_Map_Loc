@@ -41,6 +41,7 @@ find_package(catkin REQUIRED COMPONENTS
 find_package(PCL REQUIRED)
 find_package(GTSAM REQUIRED QUIET)
 find_package(Boost REQUIRED)
+find_package(tf_conversions REQUIRED) 
 
 add_message_files(
   DIRECTORY msg
@@ -63,6 +64,7 @@ generate_messages(
 )
 
 include_directories(${PCL_INCLUDE_DIRS})
+include_directories(${tf_conversions_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 

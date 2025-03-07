@@ -98,27 +98,74 @@ private:
 
 
         // initialize pose estimator
-        if(private_nh.param<bool>("/block_localization/specify_init_pose", true))
-        {
-            // THIS FIXES INITIAL POSE PROBLEM - COMMENT OUT IF SOMETHING WEIRD HAPPENS
+        // if(private_nh.param<bool>("/block_localization/specify_init_pose", true))
+        // {
+        //     NODELET_INFO("Initialize pose estimator with specified parameters.");
+        //     pose_estimator.reset(new block_localization::PoseEstimator(registration,
+        //         ros::Time::now(),
+        //         Eigen::Vector3d(private_nh.param<double>("/block_localization/init_pos_x", 0.0), private_nh.param<double>("/block_localization/init_pos_y", 0.0), private_nh.param<double>("/block_localization/init_pos_z", 0.0)),
+        //         Eigen::Quaterniond(private_nh.param<double>("/block_localization/init_ori_w", 1.0), private_nh.param<double>("/block_localization/init_ori_x", 0.0),
+        //                 private_nh.param<double>("/block_localization/init_ori_y", 0.0), private_nh.param<double>("/block_localization/init_ori_z", 0.0)),
+        //         private_nh.param<double>("/block_localization/cool_time_duration", 0.5)
+        //     ));
+        // }
+
+
+
+
+        // Debugging: Print all initial pose parameters before using them
+        bool specify_init_pose = private_nh.param<bool>("/block_localization/specify_init_pose", true);
+        double init_x = private_nh.param<double>("/block_localization/init_pos_x", 0.0);
+        double init_y = private_nh.param<double>("/block_localization/init_pos_y", 0.0);
+        double init_z = private_nh.param<double>("/block_localization/init_pos_z", 0.0);
+        double init_ori_w = private_nh.param<double>("/block_localization/init_ori_w", 1.0);
+        double init_ori_x = private_nh.param<double>("/block_localization/init_ori_x", 0.0);
+        double init_ori_y = private_nh.param<double>("/block_localization/init_ori_y", 0.0);
+        double init_ori_z = private_nh.param<double>("/block_localization/init_ori_z", 0.0);
+
+        NODELET_INFO("Pose initialization parameters:");
+        NODELET_INFO(" - specify_init_pose: %s", specify_init_pose ? "true" : "false");
+        NODELET_INFO(" - init_pos_x: %f", init_x);
+        NODELET_INFO(" - init_pos_y: %f", init_y);
+        NODELET_INFO(" - init_pos_z: %f", init_z);
+        NODELET_INFO(" - init_ori_w: %f", init_ori_w);
+        NODELET_INFO(" - init_ori_x: %f", init_ori_x);
+        NODELET_INFO(" - init_ori_y: %f", init_ori_y);
+        NODELET_INFO(" - init_ori_z: %f", init_ori_z);
+
+        if (specify_init_pose) {
             NODELET_INFO("Initializing prevPose_ with specified parameters...");
             prevPose_ = gtsam::Pose3(
-                gtsam::Rot3(Eigen::Quaterniond(private_nh.param<double>("/block_localization/init_ori_w", 1.0), private_nh.param<double>("/block_localization/init_ori_x", 0.0),
-                        private_nh.param<double>("/block_localization/init_ori_y", 0.0), private_nh.param<double>("/block_localization/init_ori_z", 0.0))),
-                gtsam::Point3(private_nh.param<double>("/block_localization/init_pos_x", 0.0), private_nh.param<double>("/block_localization/init_pos_y", 0.0), private_nh.param<double>("/block_localization/init_pos_z", 0.0))
+                gtsam::Rot3(Eigen::Quaterniond(init_ori_w, init_ori_x, init_ori_y, init_ori_z)),
+                gtsam::Point3(init_x, init_y, init_z)
             );
-            NODELET_INFO("prevPose_ set to: x=%f, y=%f, z=%f and rest of orientation data...", prevPose_.x(), prevPose_.y(), prevPose_.z());
 
+            NODELET_INFO("prevPose_ set to: x=%f, y=%f, z=%f", prevPose_.x(), prevPose_.y(), prevPose_.z());
+        }
+        
 
-            NODELET_INFO("Initialize pose estimator with specified parameters.");
-            pose_estimator.reset(new block_localization::PoseEstimator(registration,
+        // Debugging: Check if pose initialization happens
+        if (specify_init_pose) {
+            NODELET_INFO("Initializing pose estimator with specified parameters...");
+            pose_estimator.reset(new block_localization::PoseEstimator(
+                registration,
                 ros::Time::now(),
-                Eigen::Vector3d(private_nh.param<double>("/block_localization/init_pos_x", 0.0), private_nh.param<double>("/block_localization/init_pos_y", 0.0), private_nh.param<double>("/block_localization/init_pos_z", 0.0)),
-                Eigen::Quaterniond(private_nh.param<double>("/block_localization/init_ori_w", 1.0), private_nh.param<double>("/block_localization/init_ori_x", 0.0),
-                        private_nh.param<double>("/block_localization/init_ori_y", 0.0), private_nh.param<double>("/block_localization/init_ori_z", 0.0)),
+                Eigen::Vector3d(init_x, init_y, init_z),
+                Eigen::Quaterniond(init_ori_w, init_ori_x, init_ori_y, init_ori_z),
                 private_nh.param<double>("/block_localization/cool_time_duration", 0.5)
             ));
+
+            if (pose_estimator) {
+                NODELET_INFO("Pose estimator successfully initialized with:");
+                NODELET_INFO(" - Position: (%f, %f, %f)", init_x, init_y, init_z);
+                NODELET_INFO(" - Orientation: (%f, %f, %f, %f)", init_ori_w, init_ori_x, init_ori_y, init_ori_z);
+            } else {
+                NODELET_ERROR("Pose estimator initialization failed!");
+            }
+        } else {
+            NODELET_WARN("specify_init_pose is false. Waiting for manual input of initial pose.");
         }
+
 
 
 

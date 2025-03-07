@@ -1,0 +1,79 @@
+block_localization: 
+    odom_child_frame_id: "os_sensor"
+
+    # lidar settings
+    lidarTopic: "/os_cloud_node/points"
+    have_ring_time_channel: false     # if "XYZI", false; if "XYZIRT", true
+    lidarMinRange: 2.0
+    lidarMaxRange: 130
+    
+    # imu settings
+    imuTopic: "/os_cloud_node/imu"
+    imuAccNoise: 1.2
+    imuGyrNoise: 1.5
+    gravity: 9.81
+    imuFrequency: 150 # given as 200
+
+    # sensors extrinsics T_lb actually between LiDAR & IMU, only extrinsicRot is used in code
+    # IF REMOVE ANY OF THESE PARAMS THEN  NDOELET WILL NOT LOAD CORRECTLY
+
+    extrinsicTrans: [-0.014, 0.012, 0.015]
+    extrinsicRot: [1, 0, 0,
+                    0, 1, 0,
+                    0, 0, 1]
+    extrinsicRPY: [1, 0, 0,
+                    0, 1, 0,
+                    0, 0, 1]
+
+
+    L2gt_t: [ 0, 0, 0 ]
+    L2gt_R: [ 1, 0, 0,
+              0, 1, 0,
+              0, 0, 1 ]
+
+    # system settings
+    cool_time_duration: 0.1    # during "cool_time", imu inputs are ignored
+    key_interval: 0.1           # select key frames according to time interval
+    mapqry_interval: 1.0        # query time to change BM
+    
+    # ndt settings
+    ndt_neighbor_search_method: "DIRECT7"
+    ndt_resolution: 1.3
+    ndt_epsilon: 0.0007           # maximum allowable translation squared difference between two consecutive transformations
+    penalty_thres: 0.7
+    penalty_weight: 1
+
+    # gtsam settings
+    odomLinearNoise: 1.2
+    odomAngularNoise: 1.5
+    active_factors: 100
+    preserve_factors: 50
+
+    # initialpose settings
+    # if "specify_init_pose" is true, pose estimator will be initialized with the following params. Otherwise, you need to input an initial pose with "2D Pose Estimate" on rviz" 
+    specify_init_pose: true
+    # collection 1-easy
+    # init_pos_x: 6.480905467
+    # init_pos_y: -56.18264898
+    # init_pos_z: 0.9662902927
+    # init_ori_w: 0.8803723248999999
+    # init_ori_x: -0.008606563288
+    # init_ori_y: 0.02200112682
+    # init_ori_z: 0.473694466  
+
+    # collection 1-hard
+    init_pos_x: 6.510104263
+    init_pos_y: -56.45827264
+    init_pos_z: 1.056539839
+    init_ori_w: 0.8413500824
+    init_ori_x: 0.001824973382
+    init_ori_y: 0.00411324494
+    init_ori_z: 0.5404718212      
+
+
+
+
+globalmap_server:
+    globalmap_dir: "/home/wuxiao/Desktop/newer_block_maps/" # directory address of your BMs; end with "/"
+    downsample_resolution: 0.25
+    
