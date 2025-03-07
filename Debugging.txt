@@ -1,0 +1,39 @@
+Installing block map localization into ros noetic workspace:
+
+cd ~/ros_noetic_base/catkin_ws/src
+git clone https://github.com/YixFeng/Block-Map-Based-Localization
+
+Could not find a package configuration file provided by "map_server"
+
+cd ~/ros_noetic_base/catkin_ws/src
+git clone https://github.com/ros-planning/navigation.git
+
+Could NOT find SDL (missing: SDL_LIBRARY SDL_INCLUDE_DIR)
+
+sudo apt-get install libsdl1.2-dev
+
+Could NOT find SDL_image (missing: SDL_IMAGE_LIBRARIES SDL_IMAGE_INCLUDE_DIRS)
+
+sudo apt-get install libsdl-image1.2-dev
+
+Could not find a package configuration file provided by "hdl_global_localization"
+
+cd ~/ros_noetic_base/catkin_ws/src
+git clone https://github.com/koide3/hdl_global_localization
+
+Could not find a package configuration file provided by "diagnostic_updater"
+
+git clone -b noetic-devel https://github.com/ros/diagnostics.git
+
+block_map_based_localization package’s fatal error: tf_conversions/tf_eigen.h: No such file or directory
+
+Added into catkin_ws/src/Block_Map_Based_Localization/CMakeLists.txt:
+	find_package(tf_conversions REQUIRED) include_directories(${tf_conversions_INCLUDE_DIRS})
+	
+Block_localization_nodelet.cpp error: no match for ‘operator=’ (operand types are ‘pcl::Filter<pcl::PointXYZI>::Ptr’ {aka ‘std::shared_ptr<pcl::Filter<pcl::PointXYZI> >’} and ‘boost::shared_ptr<pcl::VoxelGrid<pcl::PointXYZI> >’)
+   68 |         downsample_filter = voxelgrid;
+   
+Go to catkin_ws/src/Block-Map-Based-Localization/src/block_localization_nodelet.cpp:
+From:     pcl::Filter<PointT>::Ptr downsample_filter;
+To:     boost::shared_ptr<pcl::Filter<PointT>> downsample_filter;
+
