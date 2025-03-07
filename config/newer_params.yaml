@@ -70,7 +70,7 @@ block_localization:
     # init_ori_y: 0.00411324494
     # init_ori_z: 0.5404718212      
 
-    # collection 2 (0-1)
+    # collection 2 (0-4)
     init_pos_x: 6.108666767
     init_pos_y: -56.60054368
     init_pos_z: 0.9976113055
